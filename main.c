@@ -4,9 +4,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-
 #include "riemannsum.h"
-#include "util.h"
 
 static int num_intervals = 8;
 static int threads_per_process = 8;
@@ -63,15 +61,13 @@ int main(int argc, char **argv) {
   int name_len;
   MPI_Get_processor_name(processor_name, &name_len);
 
-  printf("(%s) Hello world, rank %d out of %d\n", processor_name, mpi_rank,
-         mpi_world_size);
+  printf("Processor_name %s, rank %d out of %d\n", processor_name, mpi_rank, mpi_world_size);
   MPI_Barrier(MPI_COMM_WORLD);
 
   parse_opt(argc, argv);
 
   MPI_Barrier(MPI_COMM_WORLD);
-  double pi_estimate =
-      riemannsum(num_intervals, mpi_rank, mpi_world_size, threads_per_process);
+  double pi_estimate = riemannsum(num_intervals, mpi_rank, mpi_world_size, threads_per_process);
   MPI_Barrier(MPI_COMM_WORLD);
 
   if (mpi_rank == 0) {
